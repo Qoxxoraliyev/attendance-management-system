@@ -2,18 +2,17 @@ package com.muhammadali.attendance_management_system.mapper;
 
 import com.muhammadali.attendance_management_system.dto.UserRequestDTO;
 import com.muhammadali.attendance_management_system.dto.UserResponseDTO;
-import com.muhammadali.attendance_management_system.enums.Role;
 import com.muhammadali.attendance_management_system.model.User;
 
 public class UserMapper {
 
-    public static User toEntity(UserRequestDTO dto, Role role){
+    public static User toEntity(UserRequestDTO dto){
         User user=new User();
         user.setFirstName(dto.firstName());
         user.setLastName(dto.lastName());
         user.setEmail(dto.email());
         user.setPassword(dto.password());
-        user.setRole(role);
+        user.setRole(dto.role());
         return user;
     }
 
