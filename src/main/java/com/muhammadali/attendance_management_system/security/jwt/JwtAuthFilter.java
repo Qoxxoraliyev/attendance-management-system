@@ -1,5 +1,4 @@
 package com.muhammadali.attendance_management_system.security.jwt;
-
 import com.muhammadali.attendance_management_system.exceptions.AuthenticationFailedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-cimport java.io.IOException;
+import java.io.IOException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
