@@ -62,7 +62,7 @@ public class UserService {
 
 
     public List<UserResponseDTO> findByFaculty(){
-        return userRepository.findByFaculty(Role.FACULTY)
+        return userRepository.findByRole(Role.FACULTY)
                 .stream()
                 .map(UserMapper::toResponse)
                 .toList();
@@ -80,7 +80,7 @@ public class UserService {
 
     public List<AttendanceDTO> findByUserId(Long userId){
         getUserById(userId);
-        return attendanceRepository.findByUserId(userId)
+        return attendanceRepository.findByUser_Id(userId)
                 .stream()
                 .map(AttendanceMapper::toResponse)
                 .collect(Collectors.toList());

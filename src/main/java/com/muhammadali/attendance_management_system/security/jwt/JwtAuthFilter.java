@@ -53,6 +53,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new AuthenticationFailedException("User not found for username: "+username,e);
             }
 
+            System.out.println("Authorities: "+userDetails.getAuthorities());
+
             try {
                 if (jwtService.validateToken(token,userDetails)){
                     UsernamePasswordAuthenticationToken authToken=
@@ -70,6 +72,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request,response);
     }
+
 
 
 
