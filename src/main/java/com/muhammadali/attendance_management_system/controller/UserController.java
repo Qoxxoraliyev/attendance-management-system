@@ -50,6 +50,19 @@ public class UserController {
     }
 
 
+    @GetMapping("/students")
+    public List<UserResponseDTO> getStudents(){
+        return userService.findStudents();
+    }
+
+
+
+    @GetMapping("/faculty")
+    public List<UserResponseDTO> getFaculty(){
+        return userService.findByFaculty();
+    }
+
+
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> findAll(){
         return ResponseEntity.ok(userService.findAll());

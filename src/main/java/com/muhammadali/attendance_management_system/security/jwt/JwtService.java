@@ -36,7 +36,7 @@ public class JwtService {
                     .setSubject(email)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30 min
-                    .signWith(getSignKey(), SignatureAlgorithm.HS512)
+                    .signWith(getSignKey(), SignatureAlgorithm.HS256)
                     .compact();
         } catch (Exception e) {
             throw new AuthenticationFailedException("Token generation failed", e);

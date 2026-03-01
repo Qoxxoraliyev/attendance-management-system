@@ -2,12 +2,14 @@ package com.muhammadali.attendance_management_system.service;
 import com.muhammadali.attendance_management_system.dto.AttendanceDTO;
 import com.muhammadali.attendance_management_system.dto.UserRequestDTO;
 import com.muhammadali.attendance_management_system.dto.UserResponseDTO;
+import com.muhammadali.attendance_management_system.enums.Role;
 import com.muhammadali.attendance_management_system.exceptions.UserNotFoundException;
 import com.muhammadali.attendance_management_system.mapper.AttendanceMapper;
 import com.muhammadali.attendance_management_system.mapper.UserMapper;
 import com.muhammadali.attendance_management_system.model.User;
 import com.muhammadali.attendance_management_system.repository.AttendanceRepository;
 import com.muhammadali.attendance_management_system.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +24,18 @@ public class UserService {
 
     private final AttendanceRepository attendanceRepository;
 
-    public UserService(UserRepository userRepository, AttendanceRepository attendanceRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, AttendanceRepository attendanceRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.attendanceRepository = attendanceRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public UserResponseDTO save(UserRequestDTO dto){
         User user=UserMapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.password())); // password encode
         User saved=userRepository.save(user);
         return UserMapper.toResponse(saved);
     }
@@ -47,12 +53,27 @@ public class UserService {
     }
 
 
+    public List<UserResponseDTO> findStudents(){
+        return userRepository.findByRole(Role.STUDENT)
+                .stream()
+                .map(UserMapper::toResponse)
+                .toList();
+    }
+
+
+    public List<UserResponseDTO> findByFaculty(){
+        return userRepository.findByFaculty(Role.FACULTY)
+                .stream()
+                .map(UserMapper::toResponse)
+                .toList();
+    }
+
+
     @Transactional
     public void delete(Long id){
         if (!userRepository.existsById(id)){
             throw new UserNotFoundException("User not found with id: "+id);
         }
-
         userRepository.deleteById(id);
     }
 

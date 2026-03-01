@@ -3,6 +3,7 @@ import com.muhammadali.attendance_management_system.security.jwt.JwtAuthFilter;
 import com.muhammadali.attendance_management_system.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,14 +31,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/users/generateToken")
-                        .permitAll()
-                        .requestMatchers("/api/users")
-                        .permitAll()
-                        .requestMatchers("/api/attendance/**")
-                        .hasAnyAuthority("ADMIN","FACULTY")
-                        .requestMatchers("/api/users/**")
-                        .hasAuthority("ADMIN")
+                        .requestMatchers("/api/users/generateToken").permitAll()
+                        .requestMatchers("/api/users/students").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/users").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/users").hasAuthority("ADMIN")
+                        .requestMatchers("/api/users/faculty").hasAnyAuthority("ADMIN","FACULTY")
+                        .requestMatchers("/api/users/**").hasAnyAuthority("ADMIN","FACULTY")
+                        .requestMatchers("/api/attendance/**").hasAnyAuthority("ADMIN","FACULTY")
+                        .requestMatchers(HttpMethod.GET,"/api/attendance").permitAll()
+                        .requestMatchers("/api/attendance/**").hasAuthority("FACULTY")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter,
