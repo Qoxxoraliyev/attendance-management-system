@@ -95,6 +95,10 @@ public class UserService {
     }
 
 
+    public UserResponseDTO findById(Long id){
+        User user = getUserById(id);
+        return UserMapper.toResponse(user);
+    }
 
 
     private User getUserById(Long id){

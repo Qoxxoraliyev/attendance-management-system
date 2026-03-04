@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/attendance")
 public class AttendanceController {
@@ -34,11 +35,10 @@ public class AttendanceController {
         return ResponseEntity.ok(attendanceService.findAll());
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         attendanceService.delete(id);
-        return ResponseEntity.ok("Successful");
+        return ResponseEntity.noContent().build();
     }
 
 

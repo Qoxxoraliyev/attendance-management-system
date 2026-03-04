@@ -29,6 +29,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException{
+
+        String path = request.getServletPath();
+
+        if (path.equals("/api/auth/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader=request.getHeader("Authorization");
         if (authHeader==null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
@@ -53,7 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new AuthenticationFailedException("User not found for username: "+username,e);
             }
 
-            System.out.println("Authorities: "+userDetails.getAuthorities());
 
             try {
                 if (jwtService.validateToken(token,userDetails)){
